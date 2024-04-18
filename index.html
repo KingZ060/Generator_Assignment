@@ -1,52 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daily Planner Generator</title>
-</head>
-<body>
-    <div class="container">
-        <h1>Daily Planner Generator</h1>
-        <form id="plannerForm">
-            <label for="task">Tasks and intended time spent:</label>
-            <p>Example inputs:
-                <ul>
-                    <li>"Action" for "time"(in minutes or hours, default 1 hour)</li>
-                    <li>Read for 30 minutes</li>
-                    <li>Exercise for 1 hour</li>
-                    <li>Complete assignment 1</li>
-                </ul>
-            </p>
-            <input type="text" id="task" size="50" required>
-            <br />
-            <input type="checkbox" id="uniqueTimeToggle" onclick="toggleTimeInput()">
-            <label for="uniqueTimeToggle">Have a unique time for that?</label>
-
-            <div id="timeInputForm" style="display: none;">
-                <label for="startTime">Start Time:</label>
-                <input type="time" id="startTime">
-
-                <label for="endTime">End Time:</label>
-                <input type="time" id="endTime">
-            </div>
-            <br />
-            <input type="checkbox" id="breakToggle">
-            <label for="breakToggle">Want a break during your work?</label>
-            <br />
-            <button type="button" onclick="addTask()">Add Task</button>
-            <br />
-            <button type="button" onclick="generate()">Generate Schedule</button>
-
-
-            
-        </form>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">
+          Generator assignment
+        </h1>
+        <strong>Name:</strong> Xing Zhong
         <br />
-        <div id="schedule">
-            <h2>Your Daily Schedule</h2>
-            <ul id="taskList"></ul>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
+        <strong>Notes:</strong>
+        <br />
+        The a priori for this project is the planning itself. Contains basic features and structural elements such as date information, time period, and sections.
+        <strong>Description:</strong>
+        <br />
+        
+        Meets additional challenges 2 (providing users with the ability to download generated schedules in cvs form) and 3 (using seeds to manipulate the random).
+        <p>
+          <a href="/Generator_Assignment/src/index.html">link to the actual generator</a>
+        </p>
+      </div>
+    </section>
+  </body>
 </html>
