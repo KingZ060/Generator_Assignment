@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Planner Generator</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Daily Planner Generator</h1>
+        <form id="plannerForm">
+            <label for="task">Tasks and intended time spent:</label>
+            <p>Example inputs:
+                <ul>
+                    <li>"Action" for "time"(in minutes or hours, default 1 hour)</li>
+                    <li>Read for 30 minutes</li>
+                    <li>Exercise for 1 hour</li>
+                    <li>Complete assignment 1</li>
+                </ul>
+            </p>
+            <input type="text" id="task" size="50" required>
+            <br />
+            <input type="checkbox" id="uniqueTimeToggle" onclick="toggleTimeInput()">
+            <label for="uniqueTimeToggle">Have a unique time for that?</label>
+
+            <div id="timeInputForm" style="display: none;">
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime">
+
+                <label for="endTime">End Time:</label>
+                <input type="time" id="endTime">
+            </div>
+            <br />
+            <input type="checkbox" id="breakToggle">
+            <label for="breakToggle">Want a break during your work?</label>
+            <br />
+            <button type="button" onclick="addTask()">Add Task</button>
+            <br />
+            <button type="button" onclick="generate()">Generate Schedule</button>
+
+
+            
+        </form>
+        <br />
+        <div id="schedule">
+            <h2>Your Daily Schedule</h2>
+            <ul id="taskList"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
