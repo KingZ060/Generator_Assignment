@@ -119,6 +119,11 @@ function generateSchedule(attemptCount = 0) {
         });
     });
 
+    if(seed.length === 0){
+        rng = new Math.seedrandom();
+    }else{
+        rng = new Math.seedrandom('seed');
+    }
     shuffleArray(tasksWithoutUniqueTime);
     for (let i = 0; i < tasksWithoutUniqueTime.length; i++) {
         let task = tasksWithoutUniqueTime[i];
@@ -165,12 +170,6 @@ function formatTimeToAmPm(timeString) {
 }
 
 function getRandomStartTimes() {
-    if(seed.length === 0){
-        rng = new Math.seedrandom();
-    }else{
-        rng = new Math.seedrandom('seed');
-    }
-    
     const startTimes = [];
     const startTime = new Date("2024/01/01 08:00");
     const endTime = new Date("2024/01/01 22:00");
