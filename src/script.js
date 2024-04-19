@@ -30,7 +30,6 @@ function parseTaskDescription(taskString) {
             task.duration = timeValue;
         }
     }
-
     return task;
 }
 
@@ -38,6 +37,8 @@ function parseTaskDescription(taskString) {
 let tasksWithUniqueTime = [];
 let tasksWithoutUniqueTime = [];
 let schedule = [];
+let rng;
+let seed = '';
 
 function addTask() {
     const task = document.getElementById('task');
@@ -73,19 +74,35 @@ function addTask() {
             duration: taskDetails.duration
         });
     }
+    resetForm();
+}
 
-    task.value = '';  // Clear the input field after adding the task
+function resetForm() {
+    document.getElementById('uniqueTimeToggle').checked = false;
+    document.getElementById('timeInputForm').style.display = 'none';
+    document.getElementById('breakToggle').checked = false;
+    document.getElementById('breakToggle').disabled = false;
+    document.getElementById('task').value = '';
+    if (document.getElementById('seed')) {
+        document.getElementById('seed').value = '';
+    }
+    if (document.getElementById('startTime')) {
+        document.getElementById('startTime').value = '';
+    }
+    if (document.getElementById('endTime')) {
+        document.getElementById('endTime').value = '';
+    }
 }
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(rng() * (i + 1)); //Idea from Chatgpt
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
 
 function generateSchedule(attemptCount = 0) {
-    const maxAttempts = 3;
+    const maxAttempts = 5;
     if (attemptCount >= maxAttempts) {
         alert("Failed to schedule all tasks after several attempts.");
         return; 
@@ -127,12 +144,14 @@ function updateScheduleDisplay() {
     const taskList = document.getElementById('taskList');
     taskList.innerHTML = '';
 
+    schedule.sort((a, b) => a.startTime.localeCompare(b.startTime));
+
     schedule.forEach(item => {
         const li = document.createElement('li');
         li.textContent = `${item.startTime}-${item.endTime} ${item.task}`;
         taskList.appendChild(li);
     });
-    document.getElementById('downloadButton').style.display = 'block';
+    resetForm();
 }
 
 function formatTimeToAmPm(timeString) {
@@ -146,10 +165,16 @@ function formatTimeToAmPm(timeString) {
 }
 
 function getRandomStartTimes() {
+    if(seed.length === 0){
+        rng = new Math.seedrandom();
+    }else{
+        rng = new Math.seedrandom('seed');
+    }
+    
     const startTimes = [];
-    const startTime = new Date("1970/01/01 09:00");
-    const endTime = new Date("1970/01/01 22:00");
-    const increment = 30; // Time increment in minutes
+    const startTime = new Date("2024/01/01 08:00");
+    const endTime = new Date("2024/01/01 22:00");
+    const increment = 30;
 
     for (let time = new Date(startTime); time < endTime; time.setMinutes(time.getMinutes() + increment)) {
         startTimes.push(new Date(time));
@@ -159,51 +184,39 @@ function getRandomStartTimes() {
 }
 
 function assignRandomTime(task, durationHours, includeBreak = false) {
+    seed = document.getElementById('seed').value;
     const possibleStartTimes = getRandomStartTimes();
     const durationMilliseconds = durationHours * 60000; // Convert hours to milliseconds
     const breakDuration = 15 * 60000; // 30 minutes break in milliseconds
 
     for (let possibleStart of possibleStartTimes) {
-        let endTaskTime = new Date(possibleStart.getTime() + durationMilliseconds);
-        if (includeBreak) {
-            endTaskTime = new Date(endTaskTime.getTime() + breakDuration);
-        }
-
-        let startTimeFormatted = formatTimeToAmPm(possibleStart.toTimeString().substring(0, 5));
-        let endTimeFormatted = formatTimeToAmPm(endTaskTime.toTimeString().substring(0, 5));
-
-        let overlap = schedule.some(s => !(s.endTime <= startTimeFormatted || s.startTime >= endTimeFormatted));
+        let endTaskTime = new Date(possibleStart.getTime() + durationMilliseconds + (includeBreak ? breakDuration : 0));
+        
+        let overlap = schedule.some(s => {
+            const defaultDate = "2024/01/01";
+            let scheduledStart = new Date(defaultDate + " " + s.startTime);
+            let scheduledEnd = new Date(defaultDate + " " + s.endTime);
+            return endTaskTime > scheduledStart && possibleStart < scheduledEnd;
+        });
+        console.log(overlap)
         if (!overlap) {
+            let formattedStart = formatTimeToAmPm(possibleStart.toTimeString().substring(0, 5));
+            let formattedEnd = formatTimeToAmPm(endTaskTime.toTimeString().substring(0, 5));
+
             if (includeBreak) {
-                const breakStartTime = new Date(possibleStart.getTime() + durationMilliseconds / 2 - breakDuration / 2);
+                const breakStartTime = new Date(possibleStart.getTime() + durationMilliseconds / 2);
                 const breakEndTime = new Date(breakStartTime.getTime() + breakDuration);
 
-                schedule.push({ task: task + " (Part 1)", startTime: startTimeFormatted, endTime: formatTimeToAmPm(breakStartTime.toTimeString().substring(0, 5)) });
+                schedule.push({ task: task + " (Part 1)", startTime: formattedStart, endTime: formatTimeToAmPm(breakStartTime.toTimeString().substring(0, 5)) });
                 schedule.push({ task: "Break", startTime: formatTimeToAmPm(breakStartTime.toTimeString().substring(0, 5)), endTime: formatTimeToAmPm(breakEndTime.toTimeString().substring(0, 5)) });
-                schedule.push({ task: task + " (Part 2)", startTime: formatTimeToAmPm(breakEndTime.toTimeString().substring(0, 5)), endTime: endTimeFormatted });
+                schedule.push({ task: task + " (Part 2)", startTime: formatTimeToAmPm(breakEndTime.toTimeString().substring(0, 5)), endTime: formattedEnd });
             } else {
-                schedule.push({ task, startTime: startTimeFormatted, endTime: endTimeFormatted });
+                schedule.push({ task, startTime: formattedStart, endTime: formattedEnd });
             }
             return true;
         }
     }
 
     return null;
-}
-
-function download(){
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Task, Start Time to End Time\n";
-    schedule.forEach(item => {
-        const row = `${item.task}, ${item.startTime} to ${item.endTime}`;
-        csvContent += row + "\n";
-    });
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "schedule.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
 }
 

@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daily Planner Generator</title>
-    <style>
+    <!-- <style>
         #downloadButton {
             display: none;  /* Hide download button initially */
         }
-    </style>
+    </style> -->
 </head>
 <body>
     <div class="container">
@@ -35,12 +35,16 @@
                 <label for="endTime">End Time:</label>
                 <input type="time" id="endTime">
             </div>
-            <br />
-            <input type="checkbox" id="breakToggle">
-            <label for="breakToggle">Want a break during your work?</label>
-            <br />
-            <button type="button" onclick="addTask()">Add Task</button>
-            <br />
+            <p><input type="checkbox" id="breakToggle">
+                <label for="breakToggle">Want a break during your work?</label>
+            </p>
+            <p>
+                <button type="button" onclick="addTask()">Add Task</button>
+            </p>
+            <p>
+            <input type="text" id="seed">
+            <label for="seed">Want to set a seed for your this generation?</label>
+            </p>
             <button type="button" onclick="generateSchedule()">Generate Schedule</button>
 
 
@@ -51,9 +55,9 @@
             <h2>Your Daily Schedule</h2>
             <ul id="taskList"></ul>
         </div>
-        <div id="linkContainer"></div>
-        <button type="button" id="downloadButton" onclick="download()">Download the schedule</button>
     </div>
     <script src="script.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
 </body>
 </html>
