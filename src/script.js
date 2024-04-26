@@ -128,7 +128,7 @@ function generateSchedule(attemptCount = 0) {
         rng = new Math.seedrandom();
     }else{
         console.log("Seed provided, using seed to generate random numbers");
-        rng = new Math.seedrandom('seed');
+        rng = new Math.seedrandom(seed);
     }
     shuffleArray(tasksWithoutUniqueTime);
     for (let i = 0; i < tasksWithoutUniqueTime.length; i++) {
