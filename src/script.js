@@ -232,7 +232,7 @@ function assignRandomTime(task, durationHours, includeBreak = false) {
 
 function download(){ //Was deleted by mistake, ideas from chatgpt about how to create a csv file
     let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Task, Start Time to End Time\n";
+    csvContent += "Start Time to End Time, Task Name\n";
     csvContent += document.getElementById('taskList').innerText;
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
@@ -244,7 +244,7 @@ function download(){ //Was deleted by mistake, ideas from chatgpt about how to c
 }
 
 function copy(){
-    content = "Task, Start Time to End Time\n";
+    content = "Start Time to End Time, Task Name\n";
     content += document.getElementById('taskList').innerText;
     navigator.clipboard.writeText(content).then(() => {
         alert('Text successfully copied to clipboard!');
