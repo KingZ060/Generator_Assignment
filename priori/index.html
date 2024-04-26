@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Planner Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Daily Planner Generator</h1>
+        <form id="plannerForm">
+            <label for="task">Task:</label>
+            <input type="text" id="task" name="task" required>
+
+            <label for="start">Start Time:</label>
+            <input type="time" id="start" name="start" required>
+
+            <label for="end">End Time:</label>
+            <input type="time" id="end" name="end" required>
+
+            <button type="button" onclick="addTask()">Add Task</button>
+        </form>
+        <div id="schedule">
+            <h2>Your Daily Schedule</h2>
+            <ul id="taskList"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
